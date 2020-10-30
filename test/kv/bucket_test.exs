@@ -1,8 +1,12 @@
 defmodule KV.BucketTest do
   use ExUnit.Case, async: true
 
-  test "stores values by key" do
-    {:ok, bucket} = KV.Bucket.start_link([])
+  setup do
+    bucket = start_supervised!(KV.Bucket)
+    %{bucket: bucket}
+  end
+
+  test "stores values by key", %{bucket: bucket} do
     assert KV.Bucket.get(bucket, "milk") == nil
 
     assert KV.Bucket.put(bucket, "milk", 3) == :ok
